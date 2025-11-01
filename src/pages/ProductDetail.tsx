@@ -237,7 +237,7 @@ const ProductDetail = () => {
                     ))}
                   </div>
                   <span className="text-sm text-muted-foreground">
-                    {product.rating} ({product.reviews} reviews)
+                    {product.rating} ({totalReviews} reviews)
                   </span>
                 </div>
               </div>
@@ -440,11 +440,11 @@ const ProductDetail = () => {
                   reviews
                     .filter((review) => review && typeof review === 'object' && review.id)
                     .map((review) => (
-                    <div key={review.id} className="border-b last:border-0 pb-6 last:pb-0">
-                      <div className="flex items-start justify-between mb-2">
-                        <div>
-                          <div className="flex items-center gap-2 mb-1">
-                            <span className="font-semibold">{review.user?.name || 'Anonymous'}</span>
+                      <div key={review.id} className="border-b last:border-0 pb-6 last:pb-0">
+                        <div className="flex items-start justify-between mb-2">
+                          <div>
+                            <div className="flex items-center gap-2 mb-1">
+                              <span className="font-semibold">{review.user?.name || 'Anonymous'}</span>
                             <div className="flex">
                               {[1, 2, 3, 4, 5].map((star) => (
                                 <Star
