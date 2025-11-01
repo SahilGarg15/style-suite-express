@@ -81,7 +81,7 @@ const ProductDetail = () => {
       
       // Check if current user has already reviewed
       if (user) {
-        const userReview = data.reviews.find((r: any) => r.user.id === user.id);
+        const userReview = data.reviews.find((r: any) => r.user?.id === user.id);
         setUserHasReviewed(!!userReview);
       }
     } catch (error) {
