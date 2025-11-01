@@ -441,7 +441,7 @@ const ProductDetail = () => {
                       <div className="flex items-start justify-between mb-2">
                         <div>
                           <div className="flex items-center gap-2 mb-1">
-                            <span className="font-semibold">{review.user.name}</span>
+                            <span className="font-semibold">{review.user?.name || 'Anonymous'}</span>
                             <div className="flex">
                               {[1, 2, 3, 4, 5].map((star) => (
                                 <Star
@@ -461,7 +461,7 @@ const ProductDetail = () => {
                             })}
                           </p>
                         </div>
-                        {user?.id === review.user.id && (
+                        {user?.id === review.user?.id && (
                           <Button
                             variant="ghost"
                             size="sm"
