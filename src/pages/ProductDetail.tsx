@@ -75,17 +75,18 @@ const ProductDetail = () => {
   const fetchReviews = async (productId: string) => {
     try {
       const data = await reviewsApi.getProductReviews(productId);
-      setReviews(data.reviews);
-      setAverageRating(data.averageRating);
-      setTotalReviews(data.totalReviews);
+      setReviews(Array.isArray(data.reviews) ? data.reviews : []);
+      setAverageRating(data.averageRating || 0);
+      setTotalReviews(data.totalReviews || 0);
       
       // Check if current user has already reviewed
-      if (user) {
+      if (user && Array.isArray(data.reviews)) {
         const userReview = data.reviews.find((r: any) => r.user?.id === user.id);
         setUserHasReviewed(!!userReview);
       }
     } catch (error) {
       console.error('Failed to fetch reviews:', error);
+      setReviews([]);
     }
   };
 
@@ -436,7 +437,9 @@ const ProductDetail = () => {
                     No reviews yet. Be the first to review this product!
                   </p>
                 ) : (
-                  reviews.map((review) => (
+                  reviews
+                    .filter((review) => review && typeof review === 'object' && review.id)
+                    .map((review) => (
                     <div key={review.id} className="border-b last:border-0 pb-6 last:pb-0">
                       <div className="flex items-start justify-between mb-2">
                         <div>
@@ -472,7 +475,7 @@ const ProductDetail = () => {
                           </Button>
                         )}
                       </div>
-                      {review.comment && (
+                      {review.comment && typeof review.comment === 'string' && (
                         <p className="text-sm leading-relaxed mt-2">{review.comment}</p>
                       )}
                     </div>
