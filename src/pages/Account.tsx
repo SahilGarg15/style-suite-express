@@ -1,36 +1,44 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Order } from "@/types/product";
-import { Package, User, Heart } from "lucide-react";
+import { Package, User, Heart, LogOut } from "lucide-react";
 import { useWishlist } from "@/contexts/WishlistContext";
+import { useAuth } from "@/contexts/AuthContext";
 import ProductCard from "@/components/ProductCard";
+import { toast } from "sonner";
 
 const Account = () => {
-  const [isLoggedIn] = useState(false); // This would be managed by auth context in real app
+  const { isAuthenticated, user, signOut } = useAuth();
+  const navigate = useNavigate();
   const orders: Order[] = JSON.parse(localStorage.getItem("orders") || "[]");
   const { items: wishlistItems } = useWishlist();
 
-  if (!isLoggedIn) {
+  const handleSignOut = () => {
+    signOut();
+    toast.success("Signed out successfully");
+    navigate("/");
+  };
+
+  if (!isAuthenticated) {
     return (
       <div className="min-h-screen flex flex-col">
         <Navbar />
-        <div className="flex-1 flex items-center justify-center">
-          <div className="text-center max-w-md">
+        <div className="flex-1 flex items-center justify-center py-16">
+          <div className="text-center max-w-md px-4">
             <User className="h-24 w-24 mx-auto mb-6 text-muted-foreground" />
             <h1 className="text-4xl font-bold mb-4">My Account</h1>
             <p className="text-muted-foreground mb-8">
               Please sign in to view your account details and order history
             </p>
-            <div className="flex gap-4 justify-center">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link to="/auth">
-                <Button size="lg">Sign In</Button>
+                <Button size="lg" className="w-full sm:w-auto">Sign In</Button>
               </Link>
               <Link to="/track-order">
-                <Button size="lg" variant="outline">
+                <Button size="lg" variant="outline" className="w-full sm:w-auto">
                   Track Order as Guest
                 </Button>
               </Link>
@@ -47,7 +55,16 @@ const Account = () => {
       <Navbar />
 
       <div className="container mx-auto px-4 py-8">
-        <h1 className="text-4xl font-bold mb-8">My Account</h1>
+        <div className="flex justify-between items-center mb-8">
+          <div>
+            <h1 className="text-4xl font-bold">My Account</h1>
+            <p className="text-muted-foreground mt-2">Welcome back, {user?.name}!</p>
+          </div>
+          <Button variant="outline" onClick={handleSignOut}>
+            <LogOut className="h-4 w-4 mr-2" />
+            Sign Out
+          </Button>
+        </div>
 
         <Tabs defaultValue="orders" className="space-y-8">
           <TabsList className="grid w-full max-w-md grid-cols-3">
