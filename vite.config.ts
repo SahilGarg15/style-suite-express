@@ -25,7 +25,10 @@ const apiPlugin = () => ({
         
         // Convert to module path
         let modulePath;
-        if (apiPath.startsWith('auth/')) {
+        if (apiPath === 'auth' || apiPath.startsWith('auth?')) {
+          // Consolidated auth endpoint (handles both login and signup)
+          modulePath = './api/auth/index';
+        } else if (apiPath.startsWith('auth/')) {
           modulePath = `./api/${apiPath}`;
         } else if (apiPath.startsWith('admin/')) {
           // /api/admin/products, /api/admin/orders, etc.

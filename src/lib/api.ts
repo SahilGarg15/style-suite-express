@@ -52,7 +52,7 @@ async function apiCall<T>(
 // Auth API
 export const authApi = {
   login: async (email: string, password: string) => {
-    const response = await apiCall<{ user: any; token: string }>('/auth/login', {
+    const response = await apiCall<{ user: any; token: string }>('/auth', {
       method: 'POST',
       body: JSON.stringify({ email, password }),
     });
@@ -61,7 +61,7 @@ export const authApi = {
   },
 
   signup: async (email: string, password: string, name: string) => {
-    const response = await apiCall<{ user: any; token: string }>('/auth/signup', {
+    const response = await apiCall<{ user: any; token: string }>('/auth', {
       method: 'POST',
       body: JSON.stringify({ email, password, name }),
     });
