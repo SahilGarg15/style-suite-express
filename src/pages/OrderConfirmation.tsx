@@ -4,10 +4,19 @@ import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { CheckCircle } from "lucide-react";
 import { Order } from "@/types/product";
+import { useAuth } from "@/contexts/AuthContext";
 
 const OrderConfirmation = () => {
   const { orderId } = useParams();
-  const orders: Order[] = JSON.parse(localStorage.getItem("orders") || "[]");
+  const { user } = useAuth();
+  
+  const getUserOrders = () => {
+    if (!user) return [];
+    const userOrdersKey = `orders_${user.id}`;
+    return JSON.parse(localStorage.getItem(userOrdersKey) || "[]");
+  };
+  
+  const orders: Order[] = getUserOrders();
   const order = orders.find((o) => o.id === orderId);
 
   if (!order) {
@@ -47,7 +56,7 @@ const OrderConfirmation = () => {
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Order Total</p>
-                <p className="font-semibold">${order.total.toFixed(2)}</p>
+                <p className="font-semibold">₹{order.total.toFixed(2)}</p>
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Tracking Number</p>

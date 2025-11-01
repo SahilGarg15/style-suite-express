@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { useCart } from "@/contexts/CartContext";
+import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -12,6 +13,7 @@ import { Order } from "@/types/product";
 
 const Checkout = () => {
   const { items, getTotal, clearCart } = useCart();
+  const { user } = useAuth();
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -41,16 +43,19 @@ const Checkout = () => {
     const order: Order = {
       id: `ORD-${Date.now()}`,
       items,
-      total: getTotal() + (getTotal() > 100 ? 0 : 10),
+      total: getTotal() + (getTotal() > 500 ? 0 : 40),
       status: "processing",
       date: new Date().toISOString(),
       shippingAddress: formData,
       trackingNumber: `TRK${Math.random().toString(36).substr(2, 9).toUpperCase()}`,
     };
 
-    // Save to localStorage
-    const existingOrders = JSON.parse(localStorage.getItem("orders") || "[]");
-    localStorage.setItem("orders", JSON.stringify([...existingOrders, order]));
+    // Save to user-specific localStorage
+    if (user) {
+      const userOrdersKey = `orders_${user.id}`;
+      const existingOrders = JSON.parse(localStorage.getItem(userOrdersKey) || "[]");
+      localStorage.setItem(userOrdersKey, JSON.stringify([...existingOrders, order]));
+    }
 
     toast.success("Order placed successfully!");
     clearCart();
@@ -179,7 +184,7 @@ const Checkout = () => {
                       </p>
                       <p className="text-sm">Qty: {item.quantity}</p>
                     </div>
-                    <p className="font-semibold">${item.product.price * item.quantity}</p>
+                    <p className="font-semibold">₹{item.product.price * item.quantity}</p>
                   </div>
                 ))}
               </div>
@@ -187,18 +192,18 @@ const Checkout = () => {
               <div className="space-y-2">
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Subtotal</span>
-                  <span className="font-semibold">${getTotal().toFixed(2)}</span>
+                  <span className="font-semibold">₹{getTotal().toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Shipping</span>
                   <span className="font-semibold">
-                    {getTotal() > 100 ? "FREE" : "$10.00"}
+                    {getTotal() > 500 ? "FREE" : "₹50"}
                   </span>
                 </div>
                 <Separator />
                 <div className="flex justify-between text-xl font-bold">
                   <span>Total</span>
-                  <span>${(getTotal() + (getTotal() > 100 ? 0 : 10)).toFixed(2)}</span>
+                  <span>₹{(getTotal() + (getTotal() > 500 ? 0 : 50)).toFixed(2)}</span>
                 </div>
               </div>
             </div>

@@ -4,22 +4,103 @@ import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Order } from "@/types/product";
-import { Package, User, Heart, LogOut } from "lucide-react";
+import { Package, User, Heart, LogOut, Mail, MapPin, Phone, Calendar } from "lucide-react";
 import { useWishlist } from "@/contexts/WishlistContext";
 import { useAuth } from "@/contexts/AuthContext";
 import ProductCard from "@/components/ProductCard";
 import { toast } from "sonner";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { useState, useEffect } from "react";
 
 const Account = () => {
   const { isAuthenticated, user, signOut } = useAuth();
   const navigate = useNavigate();
-  const orders: Order[] = JSON.parse(localStorage.getItem("orders") || "[]");
+  
+  // Get user-specific orders
+  const getUserOrders = () => {
+    if (!user) return [];
+    const userOrdersKey = `orders_${user.id}`;
+    return JSON.parse(localStorage.getItem(userOrdersKey) || "[]");
+  };
+  
+  const [orders, setOrders] = useState<Order[]>([]);
   const { items: wishlistItems } = useWishlist();
+
+  // Profile form state
+  const [isEditing, setIsEditing] = useState(false);
+  const [profileData, setProfileData] = useState({
+    name: user?.name || "",
+    email: user?.email || "",
+    phone: "",
+    address: "",
+    city: "",
+    zipCode: "",
+    country: "",
+  });
+
+  // Load saved profile data on mount
+  useEffect(() => {
+    if (user) {
+      // Load user-specific orders
+      setOrders(getUserOrders());
+      
+      // Load user-specific profile
+      const userProfileKey = `userProfile_${user.id}`;
+      const savedProfile = localStorage.getItem(userProfileKey);
+      if (savedProfile) {
+        setProfileData(JSON.parse(savedProfile));
+      } else {
+        setProfileData((prev) => ({
+          ...prev,
+          name: user.name,
+          email: user.email,
+        }));
+      }
+    }
+  }, [user]);
 
   const handleSignOut = () => {
     signOut();
     toast.success("Signed out successfully");
     navigate("/");
+  };
+
+  const handleProfileChange = (field: string, value: string) => {
+    setProfileData((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const handleSaveProfile = () => {
+    if (!user) return;
+    
+    // Save profile to localStorage with user-specific key
+    const userProfileKey = `userProfile_${user.id}`;
+    localStorage.setItem(userProfileKey, JSON.stringify(profileData));
+    setIsEditing(false);
+    toast.success("Profile updated successfully");
+  };
+
+  const handleCancelEdit = () => {
+    if (!user) return;
+    
+    // Reset to saved data
+    const userProfileKey = `userProfile_${user.id}`;
+    const savedProfile = localStorage.getItem(userProfileKey);
+    if (savedProfile) {
+      setProfileData(JSON.parse(savedProfile));
+    } else {
+      setProfileData({
+        name: user.name,
+        email: user.email,
+        phone: "",
+        address: "",
+        city: "",
+        zipCode: "",
+        country: "",
+      });
+    }
+    setIsEditing(false);
   };
 
   if (!isAuthenticated) {
@@ -99,7 +180,7 @@ const Account = () => {
                         </p>
                       </div>
                       <div className="text-right">
-                        <p className="font-bold text-lg">${order.total.toFixed(2)}</p>
+                        <p className="font-bold text-lg">₹{order.total.toFixed(2)}</p>
                         <span
                           className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${
                             order.status === "delivered"
@@ -172,10 +253,167 @@ const Account = () => {
           </TabsContent>
 
           {/* Profile Tab */}
-          <TabsContent value="profile">
-            <h2 className="text-2xl font-semibold mb-6">Profile Information</h2>
-            <div className="max-w-2xl border rounded-lg p-6">
-              <p className="text-muted-foreground">Profile management coming soon...</p>
+          <TabsContent value="profile" className="space-y-6">
+            <div className="flex justify-between items-center">
+              <h2 className="text-2xl font-semibold">Profile Information</h2>
+              {!isEditing ? (
+                <Button onClick={() => setIsEditing(true)}>Edit Profile</Button>
+              ) : (
+                <div className="flex gap-2">
+                  <Button onClick={handleSaveProfile}>Save Changes</Button>
+                  <Button variant="outline" onClick={handleCancelEdit}>
+                    Cancel
+                  </Button>
+                </div>
+              )}
+            </div>
+
+            <div className="grid gap-6 max-w-3xl">
+              {/* Personal Information Card */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <User className="h-5 w-5" />
+                    Personal Information
+                  </CardTitle>
+                  <CardDescription>
+                    Manage your personal details
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="grid gap-2">
+                    <Label htmlFor="name">Full Name</Label>
+                    <Input
+                      id="name"
+                      value={profileData.name}
+                      onChange={(e) => handleProfileChange("name", e.target.value)}
+                      disabled={!isEditing}
+                      placeholder="Enter your full name"
+                    />
+                  </div>
+                  <div className="grid gap-2">
+                    <Label htmlFor="email" className="flex items-center gap-2">
+                      <Mail className="h-4 w-4" />
+                      Email Address
+                    </Label>
+                    <Input
+                      id="email"
+                      type="email"
+                      value={profileData.email}
+                      onChange={(e) => handleProfileChange("email", e.target.value)}
+                      disabled={!isEditing}
+                      placeholder="your.email@example.com"
+                    />
+                  </div>
+                  <div className="grid gap-2">
+                    <Label htmlFor="phone" className="flex items-center gap-2">
+                      <Phone className="h-4 w-4" />
+                      Phone Number
+                    </Label>
+                    <Input
+                      id="phone"
+                      type="tel"
+                      value={profileData.phone}
+                      onChange={(e) => handleProfileChange("phone", e.target.value)}
+                      disabled={!isEditing}
+                      placeholder="+1 (555) 000-0000"
+                    />
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Address Information Card */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <MapPin className="h-5 w-5" />
+                    Shipping Address
+                  </CardTitle>
+                  <CardDescription>
+                    Default shipping address for your orders
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="grid gap-2">
+                    <Label htmlFor="address">Street Address</Label>
+                    <Input
+                      id="address"
+                      value={profileData.address}
+                      onChange={(e) => handleProfileChange("address", e.target.value)}
+                      disabled={!isEditing}
+                      placeholder="123 Main Street, Apt 4B"
+                    />
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="grid gap-2">
+                      <Label htmlFor="city">City</Label>
+                      <Input
+                        id="city"
+                        value={profileData.city}
+                        onChange={(e) => handleProfileChange("city", e.target.value)}
+                        disabled={!isEditing}
+                        placeholder="New York"
+                      />
+                    </div>
+                    <div className="grid gap-2">
+                      <Label htmlFor="zipCode">ZIP Code</Label>
+                      <Input
+                        id="zipCode"
+                        value={profileData.zipCode}
+                        onChange={(e) => handleProfileChange("zipCode", e.target.value)}
+                        disabled={!isEditing}
+                        placeholder="10001"
+                      />
+                    </div>
+                  </div>
+                  <div className="grid gap-2">
+                    <Label htmlFor="country">Country</Label>
+                    <Input
+                      id="country"
+                      value={profileData.country}
+                      onChange={(e) => handleProfileChange("country", e.target.value)}
+                      disabled={!isEditing}
+                      placeholder="United States"
+                    />
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Account Information Card */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Calendar className="h-5 w-5" />
+                    Account Information
+                  </CardTitle>
+                  <CardDescription>
+                    Your account details and statistics
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  <div className="flex justify-between py-2 border-b">
+                    <span className="text-muted-foreground">Member Since</span>
+                    <span className="font-medium">
+                      {new Date().toLocaleDateString("en-US", {
+                        month: "long",
+                        year: "numeric",
+                      })}
+                    </span>
+                  </div>
+                  <div className="flex justify-between py-2 border-b">
+                    <span className="text-muted-foreground">Total Orders</span>
+                    <span className="font-medium">{orders.length}</span>
+                  </div>
+                  <div className="flex justify-between py-2 border-b">
+                    <span className="text-muted-foreground">Wishlist Items</span>
+                    <span className="font-medium">{wishlistItems.length}</span>
+                  </div>
+                  <div className="flex justify-between py-2">
+                    <span className="text-muted-foreground">Account Status</span>
+                    <span className="font-medium text-green-600">Active</span>
+                  </div>
+                </CardContent>
+              </Card>
             </div>
           </TabsContent>
         </Tabs>

@@ -6,15 +6,25 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Package, Truck, CheckCircle, XCircle } from "lucide-react";
 import { Order } from "@/types/product";
+import { useAuth } from "@/contexts/AuthContext";
 
 const TrackOrder = () => {
+  const { user } = useAuth();
   const [orderId, setOrderId] = useState("");
   const [order, setOrder] = useState<Order | null>(null);
   const [notFound, setNotFound] = useState(false);
 
   const handleTrack = (e: React.FormEvent) => {
     e.preventDefault();
-    const orders: Order[] = JSON.parse(localStorage.getItem("orders") || "[]");
+    
+    // Get user-specific orders
+    const getUserOrders = () => {
+      if (!user) return [];
+      const userOrdersKey = `orders_${user.id}`;
+      return JSON.parse(localStorage.getItem(userOrdersKey) || "[]");
+    };
+    
+    const orders: Order[] = getUserOrders();
     const foundOrder = orders.find((o) => o.id === orderId);
 
     if (foundOrder) {
@@ -161,14 +171,14 @@ const TrackOrder = () => {
                         </p>
                         <p className="text-sm">Quantity: {item.quantity}</p>
                       </div>
-                      <p className="font-semibold">${item.product.price * item.quantity}</p>
+                      <p className="font-semibold">₹{item.product.price * item.quantity}</p>
                     </div>
                   ))}
                 </div>
                 <div className="border-t mt-4 pt-4">
                   <div className="flex justify-between text-xl font-bold">
                     <span>Total</span>
-                    <span>${order.total.toFixed(2)}</span>
+                    <span>₹{order.total.toFixed(2)}</span>
                   </div>
                 </div>
               </div>

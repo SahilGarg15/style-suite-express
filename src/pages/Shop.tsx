@@ -3,7 +3,7 @@ import { useSearchParams } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ProductCard from "@/components/ProductCard";
-import { products } from "@/data/products";
+import { productsApi } from "@/lib/api";
 import { Category, SubCategory } from "@/types/product";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -14,68 +14,66 @@ import { Label } from "@/components/ui/label";
 
 const Shop = () => {
   const [searchParams] = useSearchParams();
-  const [filteredProducts, setFilteredProducts] = useState(products);
+  const [filteredProducts, setFilteredProducts] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [sortBy, setSortBy] = useState("featured");
   
   const [selectedCategories, setSelectedCategories] = useState<Category[]>([]);
   const [selectedSubCategories, setSelectedSubCategories] = useState<SubCategory[]>([]);
-  const [priceRange, setPriceRange] = useState<[number, number]>([0, 500]);
+  const [priceRange, setPriceRange] = useState<[number, number]>([0, 10000]);
 
   useEffect(() => {
-    let filtered = [...products];
+    const fetchProducts = async () => {
+      try {
+        setIsLoading(true);
+        const categoryParam = searchParams.get("category");
+        const searchQuery = searchParams.get("search");
 
-    const categoryParam = searchParams.get("category") as Category | null;
-    const subCategoryParam = searchParams.get("sub") as SubCategory | null;
-    const searchQuery = searchParams.get("search");
+        const params: any = {};
+        
+        if (categoryParam) {
+          params.category = categoryParam;
+        }
+        if (searchQuery) {
+          params.search = searchQuery;
+        }
+        if (selectedCategories.length > 0) {
+          params.category = selectedCategories[0]; // Backend supports single category
+        }
+        if (priceRange[0] > 0) {
+          params.minPrice = priceRange[0];
+        }
+        if (priceRange[1] < 10000) {
+          params.maxPrice = priceRange[1];
+        }
+        if (sortBy && sortBy !== 'featured') {
+          params.sort = sortBy;
+        }
 
-    // Apply URL params
-    if (categoryParam && !selectedCategories.length) {
-      filtered = filtered.filter((p) => p.category === categoryParam);
-    }
-    if (subCategoryParam && !selectedSubCategories.length) {
-      filtered = filtered.filter((p) => p.subCategory === subCategoryParam);
-    }
+        const response = await productsApi.getAll(params);
+        
+        // Parse JSON strings from backend
+        const productsWithParsedData = response.products.map((p: any) => ({
+          ...p,
+          images: typeof p.images === 'string' ? JSON.parse(p.images) : p.images,
+          sizes: typeof p.sizes === 'string' ? JSON.parse(p.sizes) : p.sizes,
+          colors: typeof p.colors === 'string' ? JSON.parse(p.colors) : p.colors,
+          image: (typeof p.images === 'string' ? JSON.parse(p.images)[0] : p.images[0]) || '/placeholder.svg',
+          inStock: p.stock > 0,
+          originalPrice: p.basePrice,
+        }));
 
-    // Apply selected filters
-    if (selectedCategories.length > 0) {
-      filtered = filtered.filter((p) => selectedCategories.includes(p.category));
-    }
-    if (selectedSubCategories.length > 0) {
-      filtered = filtered.filter((p) => selectedSubCategories.includes(p.subCategory));
-    }
+        setFilteredProducts(productsWithParsedData);
+      } catch (error) {
+        console.error('Failed to fetch products:', error);
+        setFilteredProducts([]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-    // Search filter
-    if (searchQuery) {
-      const query = searchQuery.toLowerCase();
-      filtered = filtered.filter(
-        (p) =>
-          p.name.toLowerCase().includes(query) ||
-          p.description.toLowerCase().includes(query)
-      );
-    }
-
-    // Price filter
-    filtered = filtered.filter((p) => p.price >= priceRange[0] && p.price <= priceRange[1]);
-
-    // Sorting
-    switch (sortBy) {
-      case "price-low":
-        filtered.sort((a, b) => a.price - b.price);
-        break;
-      case "price-high":
-        filtered.sort((a, b) => b.price - a.price);
-        break;
-      case "rating":
-        filtered.sort((a, b) => b.rating - a.rating);
-        break;
-      case "newest":
-        // For demo purposes, reverse the array
-        filtered.reverse();
-        break;
-    }
-
-    setFilteredProducts(filtered);
-  }, [searchParams, sortBy, selectedCategories, selectedSubCategories, priceRange]);
+    fetchProducts();
+  }, [searchParams, selectedCategories, priceRange, sortBy]);
 
   const FilterContent = () => (
     <div className="space-y-6">
@@ -230,7 +228,11 @@ const Shop = () => {
 
           {/* Products Grid */}
           <div className="flex-1">
-            {filteredProducts.length > 0 ? (
+            {isLoading ? (
+              <div className="text-center py-16">
+                <p className="text-muted-foreground text-lg">Loading products...</p>
+              </div>
+            ) : filteredProducts.length > 0 ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {filteredProducts.map((product) => (
                   <ProductCard key={product.id} product={product} />
@@ -245,7 +247,7 @@ const Shop = () => {
                   onClick={() => {
                     setSelectedCategories([]);
                     setSelectedSubCategories([]);
-                    setPriceRange([0, 500]);
+                    setPriceRange([0, 10000]);
                   }}
                 >
                   Clear Filters

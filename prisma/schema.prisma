@@ -1,0 +1,269 @@
+// Production Prisma Schema for Neon DB
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id         String   @id @default(cuid())
+  email      String   @unique
+  password   String
+  name       String?
+  phone      String?
+  isVerified Boolean  @default(false)
+  role       UserRole @default(USER)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  // Relationships
+  orders    Order[]
+  reviews   Review[]
+  favorites Favorite[]
+  addresses Address[]
+  otpCodes  OTPCode[]
+
+  @@map("users")
+}
+
+model OTPCode {
+  id        String     @id @default(cuid())
+  email     String
+  code      String
+  purpose   OTPPurpose
+  expiresAt DateTime
+  isUsed    Boolean    @default(false)
+  createdAt DateTime   @default(now())
+
+  user User @relation(fields: [email], references: [email], onDelete: Cascade)
+
+  @@map("otp_codes")
+}
+
+model Product {
+  id                 String   @id @default(cuid())
+  name               String
+  description        String
+  price              Int      // Current selling price in Rupees
+  basePrice          Int      // Original price for discount calculations
+  category           String
+  subcategory        String?
+  image              String
+  images             String   // JSON string for array
+  sizes              String   // JSON string for array
+  colors             String   // JSON string for array
+  inStock            Boolean  @default(true)
+  stock              Int      @default(0)
+  lowStockThreshold  Int      @default(5)
+  sku                String?  @unique
+  weight             Float?
+  isActive           Boolean  @default(true)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  // Relations
+  reviews    Review[]
+  favorites  Favorite[]
+  orderItems OrderItem[]
+  categoryRel Category? @relation(fields: [categoryId], references: [id])
+  categoryId  String?
+
+  @@map("products")
+}
+
+model Order {
+  id              String        @id @default(cuid())
+  userId          String?
+  orderNumber     String        @unique
+  status          OrderStatus   @default(PENDING)
+  paymentMethod   PaymentMethod @default(COD)
+  paymentStatus   PaymentStatus @default(PENDING)
+  subtotal        Float
+  shipping        Float         @default(0)
+  tax             Float
+  total           Float
+  shippingAddress Json
+  customerPhone   String
+  customerName    String
+  customerEmail   String?
+  notes           String?
+  metadata        Json?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  // Relationships
+  user      User?       @relation(fields: [userId], references: [id])
+  items     OrderItem[]
+  tracking  OrderTracking?
+
+  @@map("orders")
+}
+
+model OrderItem {
+  id        String @id @default(cuid())
+  orderId   String
+  productId String
+  quantity  Int
+  price     Int
+  size      String?
+  color     String?
+
+  // Relationships
+  order   Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id])
+
+  @@map("order_items")
+}
+
+model OrderTracking {
+  id           String             @id @default(cuid())
+  orderId      String             @unique
+  status       TrackingStatus     @default(CREATED)
+  currentStep  Int                @default(0)
+  trackingSteps TrackingStep[]
+  estimatedDelivery DateTime?
+  actualDelivery    DateTime?
+  createdAt    DateTime           @default(now())
+  updatedAt    DateTime           @updatedAt
+
+  // Relationships
+  order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@map("order_tracking")
+}
+
+model TrackingStep {
+  id          String   @id @default(cuid())
+  trackingId  String
+  step        String
+  description String
+  timestamp   DateTime @default(now())
+  isCompleted Boolean  @default(false)
+
+  // Relationships
+  tracking OrderTracking @relation(fields: [trackingId], references: [id], onDelete: Cascade)
+
+  @@map("tracking_steps")
+}
+
+model Review {
+  id        String   @id @default(cuid())
+  userId    String
+  productId String
+  rating    Int
+  comment   String?
+  isVerified Boolean @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relationships
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, productId])
+  @@map("reviews")
+}
+
+model Favorite {
+  id        String   @id @default(cuid())
+  userId    String
+  productId String
+  createdAt DateTime @default(now())
+
+  // Relationships
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, productId])
+  @@map("favorites")
+}
+
+model Address {
+  id          String  @id @default(cuid())
+  userId      String
+  type        String
+  firstName   String
+  lastName    String
+  streetAddress String
+  city        String
+  state       String
+  zipCode     String
+  country     String  @default("India")
+  phone       String?
+  isDefault   Boolean @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relationships
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("addresses")
+}
+
+model Category {
+  id          String    @id @default(cuid())
+  name        String    @unique
+  slug        String    @unique
+  description String?
+  image       String?
+  isActive    Boolean   @default(true)
+  sortOrder   Int       @default(0)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  // Relationships
+  products Product[]
+
+  @@map("categories")
+}
+
+// Enums
+enum UserRole {
+  USER
+  ADMIN
+  MANAGER
+}
+
+enum OTPPurpose {
+  EMAIL_VERIFICATION
+  PASSWORD_RESET
+  LOGIN
+}
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+  RETURNED
+}
+
+enum PaymentMethod {
+  COD
+  CARD
+  UPI
+  WALLET
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+  REFUNDED
+}
+
+enum TrackingStatus {
+  CREATED
+  CONFIRMED
+  PROCESSING
+  SHIPPED
+  OUT_FOR_DELIVERY
+  DELIVERED
+  EXCEPTION
+}

@@ -155,6 +155,16 @@ const Navbar = () => {
                       Track Orders
                     </Link>
                   </DropdownMenuItem>
+                  {user?.role === 'ADMIN' && (
+                    <>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem asChild>
+                        <Link to="/admin" className="cursor-pointer font-semibold text-accent">
+                          Admin Dashboard
+                        </Link>
+                      </DropdownMenuItem>
+                    </>
+                  )}
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={signOut} className="cursor-pointer text-destructive">
                     <LogOut className="h-4 w-4 mr-2" />

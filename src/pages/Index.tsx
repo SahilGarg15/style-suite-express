@@ -4,11 +4,42 @@ import { ArrowRight, Truck, Shield, Zap } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ProductCard from "@/components/ProductCard";
-import { products } from "@/data/products";
+import { productsApi } from "@/lib/api";
+import { useState, useEffect } from "react";
 import heroImage from "@/assets/hero-fashion.jpg";
 
 const Index = () => {
-  const featuredProducts = products.slice(0, 8);
+  const [featuredProducts, setFeaturedProducts] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchFeaturedProducts = async () => {
+      try {
+        setIsLoading(true);
+        const response = await productsApi.getAll({ limit: 8 });
+        
+        // Parse JSON strings from backend
+        const productsWithParsedData = response.products.map((p: any) => ({
+          ...p,
+          images: typeof p.images === 'string' ? JSON.parse(p.images) : p.images,
+          sizes: typeof p.sizes === 'string' ? JSON.parse(p.sizes) : p.sizes,
+          colors: typeof p.colors === 'string' ? JSON.parse(p.colors) : p.colors,
+          image: (typeof p.images === 'string' ? JSON.parse(p.images)[0] : p.images[0]) || '/placeholder.svg',
+          inStock: p.stock > 0,
+          originalPrice: p.basePrice,
+        }));
+        
+        setFeaturedProducts(productsWithParsedData);
+      } catch (error) {
+        console.error('Failed to fetch featured products:', error);
+        setFeaturedProducts([]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchFeaturedProducts();
+  }, []);
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -53,7 +84,7 @@ const Index = () => {
                 <Truck className="h-8 w-8 text-accent" />
               </div>
               <h3 className="font-semibold text-lg mb-2">Free Shipping</h3>
-              <p className="text-muted-foreground">On orders over $100</p>
+              <p className="text-muted-foreground">On orders over ₹500</p>
             </div>
             <div className="text-center">
               <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-accent/10 mb-4">
@@ -82,18 +113,26 @@ const Index = () => {
               Discover our handpicked selection of premium items
             </p>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {featuredProducts.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
-          </div>
-          <div className="text-center mt-12">
-            <Link to="/shop">
-              <Button size="lg" variant="outline">
-                View All Products <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>
-            </Link>
-          </div>
+          {isLoading ? (
+            <div className="text-center py-12">
+              <p className="text-muted-foreground">Loading products...</p>
+            </div>
+          ) : (
+            <>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                {featuredProducts.map((product) => (
+                  <ProductCard key={product.id} product={product} />
+                ))}
+              </div>
+              <div className="text-center mt-12">
+                <Link to="/shop">
+                  <Button size="lg" variant="outline">
+                    View All Products <ArrowRight className="ml-2 h-5 w-5" />
+                  </Button>
+                </Link>
+              </div>
+            </>
+          )}
         </div>
       </section>
 
@@ -105,9 +144,9 @@ const Index = () => {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[
-              { name: "Men", path: "/shop?category=men", image: "/placeholder.svg" },
-              { name: "Women", path: "/shop?category=women", image: "/placeholder.svg" },
-              { name: "Children", path: "/shop?category=children", image: "/placeholder.svg" },
+              { name: "Men", path: "/shop?category=men", image: "/royal-blue-silk-kurta-for-men.png" },
+              { name: "Women", path: "/shop?category=women", image: "/red-banarasi-silk-saree-with-gold-border.png" },
+              { name: "Children", path: "/shop?category=children", image: "/girls-pink-lehenga-choli-with-embroidery.png" },
             ].map((category) => (
               <Link
                 key={category.name}

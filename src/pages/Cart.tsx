@@ -56,7 +56,7 @@ const Cart = () => {
                     <p className="text-sm text-muted-foreground">
                       Size: {item.selectedSize} | Color: {item.selectedColor}
                     </p>
-                    <p className="text-lg font-bold mt-2">${item.product.price}</p>
+                    <p className="text-lg font-bold mt-2">₹{item.product.price}</p>
                   </div>
                   <div className="flex flex-col items-end justify-between">
                     <Button
@@ -114,19 +114,19 @@ const Cart = () => {
               <div className="space-y-4">
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Subtotal</span>
-                  <span className="font-semibold">${getTotal().toFixed(2)}</span>
+                  <span className="font-semibold">₹{getTotal().toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Shipping</span>
                   <span className="font-semibold">
-                    {getTotal() > 100 ? "FREE" : "$10.00"}
+                    {getTotal() > 500 ? "FREE" : "₹50"}
                   </span>
                 </div>
                 <Separator />
                 <div className="flex justify-between text-xl font-bold">
                   <span>Total</span>
                   <span>
-                    ${(getTotal() + (getTotal() > 100 ? 0 : 10)).toFixed(2)}
+                    ₹{(getTotal() + (getTotal() > 500 ? 0 : 50)).toFixed(2)}
                   </span>
                 </div>
               </div>

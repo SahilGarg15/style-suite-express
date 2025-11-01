@@ -1,15 +1,17 @@
 import { createContext, useContext, useState, ReactNode, useEffect } from "react";
+import { authApi, getAuthToken } from "@/lib/api";
 
 interface User {
   id: string;
   email: string;
   name: string;
+  role?: string;
 }
 
 interface AuthContextType {
   user: User | null;
   isLoading: boolean;
-  signIn: (email: string, password: string, name?: string) => Promise<void>;
+  signIn: (email: string, password: string) => Promise<void>;
   signUp: (email: string, password: string, name: string) => Promise<void>;
   signOut: () => void;
   isAuthenticated: boolean;
@@ -24,42 +26,52 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     // Check for existing session on mount
     const savedUser = localStorage.getItem("user");
-    if (savedUser) {
+    const token = getAuthToken();
+    
+    if (savedUser && token) {
       setUser(JSON.parse(savedUser));
     }
     setIsLoading(false);
   }, []);
 
   const signIn = async (email: string, password: string) => {
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    
-    // In a real app, this would validate credentials with backend
-    const newUser: User = {
-      id: `user_${Date.now()}`,
-      email,
-      name: email.split("@")[0],
-    };
-    
-    setUser(newUser);
-    localStorage.setItem("user", JSON.stringify(newUser));
+    try {
+      const response = await authApi.login(email, password);
+      const newUser: User = {
+        id: response.user.id,
+        email: response.user.email,
+        name: response.user.name,
+        role: response.user.role,
+      };
+      
+      setUser(newUser);
+      localStorage.setItem("user", JSON.stringify(newUser));
+    } catch (error) {
+      console.error('Login error:', error);
+      throw error;
+    }
   };
 
   const signUp = async (email: string, password: string, name: string) => {
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    
-    const newUser: User = {
-      id: `user_${Date.now()}`,
-      email,
-      name,
-    };
-    
-    setUser(newUser);
-    localStorage.setItem("user", JSON.stringify(newUser));
+    try {
+      const response = await authApi.signup(email, password, name);
+      const newUser: User = {
+        id: response.user.id,
+        email: response.user.email,
+        name: response.user.name,
+        role: response.user.role,
+      };
+      
+      setUser(newUser);
+      localStorage.setItem("user", JSON.stringify(newUser));
+    } catch (error) {
+      console.error('Signup error:', error);
+      throw error;
+    }
   };
 
   const signOut = () => {
+    authApi.logout();
     setUser(null);
     localStorage.removeItem("user");
   };
