@@ -30,6 +30,12 @@ const apiPlugin = () => ({
           modulePath = './api/auth/index';
         } else if (apiPath.startsWith('auth/')) {
           modulePath = `./api/${apiPath}`;
+        } else if (apiPath.startsWith('v1/products')) {
+          // /api/v1/products (external API)
+          modulePath = './api/v1/products';
+        } else if (apiPath.startsWith('v1/orders')) {
+          // /api/v1/orders (external API)
+          modulePath = './api/v1/orders';
         } else if (apiPath.startsWith('admin/')) {
           // /api/admin/products, /api/admin/orders, etc.
           modulePath = `./api/${apiPath}`;

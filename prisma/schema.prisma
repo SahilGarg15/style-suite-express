@@ -267,3 +267,16 @@ enum TrackingStatus {
   DELIVERED
   EXCEPTION
 }
+
+model ApiKey {
+  id          String   @id @default(cuid())
+  key         String   @unique
+  name        String
+  description String?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  lastUsed    DateTime?
+
+  @@map("api_keys")
+}
