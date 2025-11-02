@@ -31,13 +31,9 @@ const apiPlugin = () => ({
         } else if (apiPath.startsWith('auth/')) {
           modulePath = `./api/${apiPath}`;
         } else if (apiPath.startsWith('v1/')) {
-          // /api/v1/* (external API - consolidated endpoint)
-          modulePath = './api/v1/index';
-          // Extract action from path (products or orders)
+          // /api/v1/* (external API endpoints)
           const v1Path = apiPath.replace('v1/', '');
-          if (v1Path && v1Path !== 'index') {
-            url.searchParams.set('action', v1Path);
-          }
+          modulePath = `./api/v1/${v1Path}`;
         } else if (apiPath.startsWith('admin/')) {
           // /api/admin/products, /api/admin/orders, etc.
           modulePath = `./api/${apiPath}`;
