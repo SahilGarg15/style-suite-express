@@ -53,8 +53,12 @@ const apiPlugin = () => ({
           modulePath = './api/products/[id]';
           url.searchParams.set('id', id);
         } else if (apiPath.startsWith('orders/')) {
-          const subPath = apiPath.replace('orders/', '');
-          modulePath = `./api/orders/${subPath}`;
+          // /api/orders/* (consolidated orders endpoint)
+          modulePath = './api/orders/index';
+          const orderAction = apiPath.replace('orders/', '');
+          if (orderAction && orderAction !== 'index') {
+            url.searchParams.set('action', orderAction);
+          }
         } else if (apiPath.startsWith('users/')) {
           modulePath = './api/users/profile';
         } else {
