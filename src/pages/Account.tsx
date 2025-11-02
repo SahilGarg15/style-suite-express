@@ -42,9 +42,71 @@ const Account = () => {
 
   // Load saved profile data on mount
   useEffect(() => {
+    const fetchOrders = async () => {
+      if (user) {
+        try {
+          const token = localStorage.getItem('token');
+          if (token) {
+            // Fetch orders from API
+            const response = await fetch('/api/orders/index?action=my-orders', {
+              headers: {
+                'Authorization': `Bearer ${token}`
+              }
+            });
+            
+            if (response.ok) {
+              const apiOrders = await response.json();
+              
+              // Convert API orders to local Order format
+              const formattedOrders: Order[] = apiOrders.map((apiOrder: any) => {
+                let shippingAddress = apiOrder.shippingAddress;
+                if (typeof shippingAddress === 'string') {
+                  shippingAddress = JSON.parse(shippingAddress);
+                }
+                
+                return {
+                  id: apiOrder.orderNumber,
+                  items: apiOrder.items.map((item: any) => ({
+                    product: item.product,
+                    quantity: item.quantity,
+                    selectedSize: "M",
+                    selectedColor: "Default"
+                  })),
+                  total: apiOrder.total,
+                  status: apiOrder.status.toLowerCase(),
+                  date: apiOrder.createdAt,
+                  shippingAddress: {
+                    name: shippingAddress.name || apiOrder.customerName,
+                    address: shippingAddress.addressLine1,
+                    city: shippingAddress.city,
+                    state: shippingAddress.state,
+                    zipCode: shippingAddress.pincode,
+                    phone: shippingAddress.phone || apiOrder.customerPhone
+                  },
+                  trackingNumber: apiOrder.orderNumber
+                };
+              });
+              
+              setOrders(formattedOrders);
+              
+              // Also sync to localStorage
+              const userOrdersKey = `orders_${user.id}`;
+              localStorage.setItem(userOrdersKey, JSON.stringify(formattedOrders));
+              
+              return;
+            }
+          }
+        } catch (error) {
+          console.error('Error fetching orders from API:', error);
+        }
+        
+        // Fallback to localStorage
+        setOrders(getUserOrders());
+      }
+    };
+    
     if (user) {
-      // Load user-specific orders
-      setOrders(getUserOrders());
+      fetchOrders();
       
       // Load user-specific profile
       const userProfileKey = `userProfile_${user.id}`;

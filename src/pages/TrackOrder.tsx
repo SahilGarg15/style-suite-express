@@ -14,10 +14,54 @@ const TrackOrder = () => {
   const [order, setOrder] = useState<Order | null>(null);
   const [notFound, setNotFound] = useState(false);
 
-  const handleTrack = (e: React.FormEvent) => {
+  const handleTrack = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Get user-specific orders
+    try {
+      // First try to fetch from API
+      const response = await fetch(`/api/orders/index?action=track&orderNumber=${orderId}`);
+      
+      if (response.ok) {
+        const fetchedOrder = await response.json();
+        
+        // Parse shipping address if it's a string
+        let shippingAddress = fetchedOrder.shippingAddress;
+        if (typeof shippingAddress === 'string') {
+          shippingAddress = JSON.parse(shippingAddress);
+        }
+        
+        // Convert API order format to local Order type
+        const order: Order = {
+          id: fetchedOrder.orderNumber,
+          items: fetchedOrder.items.map((item: any) => ({
+            product: item.product,
+            quantity: item.quantity,
+            selectedSize: "M", // Default since API doesn't store this
+            selectedColor: "Default"
+          })),
+          total: fetchedOrder.total,
+          status: fetchedOrder.status.toLowerCase(),
+          date: fetchedOrder.createdAt,
+          shippingAddress: {
+            name: shippingAddress.name || fetchedOrder.customerName,
+            address: shippingAddress.addressLine1,
+            city: shippingAddress.city,
+            state: shippingAddress.state,
+            zipCode: shippingAddress.pincode,
+            phone: shippingAddress.phone || fetchedOrder.customerPhone
+          },
+          trackingNumber: fetchedOrder.orderNumber
+        };
+        
+        setOrder(order);
+        setNotFound(false);
+        return;
+      }
+    } catch (error) {
+      console.error('Error fetching order from API:', error);
+    }
+    
+    // Fallback to localStorage if API fails
     const getUserOrders = () => {
       if (!user) return [];
       const userOrdersKey = `orders_${user.id}`;

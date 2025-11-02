@@ -30,7 +30,7 @@ const Checkout = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     // Validation
@@ -39,27 +39,84 @@ const Checkout = () => {
       return;
     }
 
-    // Create order
-    const order: Order = {
-      id: `ORD-${Date.now()}`,
-      items,
-      total: getTotal() + (getTotal() > 500 ? 0 : 40),
-      status: "processing",
-      date: new Date().toISOString(),
-      shippingAddress: formData,
-      trackingNumber: `TRK${Math.random().toString(36).substr(2, 9).toUpperCase()}`,
-    };
-
-    // Save to user-specific localStorage
-    if (user) {
-      const userOrdersKey = `orders_${user.id}`;
-      const existingOrders = JSON.parse(localStorage.getItem(userOrdersKey) || "[]");
-      localStorage.setItem(userOrdersKey, JSON.stringify([...existingOrders, order]));
+    if (!user) {
+      toast.error("Please login to place an order");
+      navigate("/auth");
+      return;
     }
 
-    toast.success("Order placed successfully!");
-    clearCart();
-    navigate(`/order-confirmation/${order.id}`);
+    try {
+      // Get authentication token
+      const token = localStorage.getItem('token');
+      if (!token) {
+        toast.error("Please login to place an order");
+        navigate("/auth");
+        return;
+      }
+
+      // Prepare order data for API
+      const orderData = {
+        items: items.map(item => ({
+          productId: item.product.id,
+          quantity: item.quantity,
+          price: item.product.price
+        })),
+        shippingAddress: {
+          name: formData.name,
+          phone: formData.phone,
+          addressLine1: formData.address,
+          addressLine2: "",
+          city: formData.city,
+          state: formData.state,
+          pincode: formData.zipCode,
+          country: "India"
+        },
+        paymentMethod: "COD",
+        customerName: formData.name,
+        customerEmail: user.email,
+        customerPhone: formData.phone
+      };
+
+      // Call API to create order
+      const response = await fetch('/api/orders/index?action=create', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(orderData)
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Failed to place order');
+      }
+
+      const order = await response.json();
+
+      // Also save to localStorage for backward compatibility
+      const userOrdersKey = `orders_${user.id}`;
+      const existingOrders = JSON.parse(localStorage.getItem(userOrdersKey) || "[]");
+      
+      const localOrder: Order = {
+        id: order.orderNumber,
+        items,
+        total: order.total,
+        status: "processing",
+        date: order.createdAt,
+        shippingAddress: formData,
+        trackingNumber: order.orderNumber,
+      };
+      
+      localStorage.setItem(userOrdersKey, JSON.stringify([...existingOrders, localOrder]));
+
+      toast.success("Order placed successfully!");
+      clearCart();
+      navigate(`/order-confirmation/${order.orderNumber}`);
+    } catch (error) {
+      console.error('Order creation error:', error);
+      toast.error(error instanceof Error ? error.message : 'Failed to place order');
+    }
   };
 
   if (items.length === 0) {
