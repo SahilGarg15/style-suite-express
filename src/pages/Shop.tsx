@@ -52,13 +52,13 @@ const Shop = () => {
 
         const response = await productsApi.getAll(params);
         
-        // Parse JSON strings from backend
+        // Backend already parses JSON strings, so just ensure data consistency
         const productsWithParsedData = response.products.map((p: any) => ({
           ...p,
-          images: typeof p.images === 'string' ? JSON.parse(p.images) : p.images,
-          sizes: typeof p.sizes === 'string' ? JSON.parse(p.sizes) : p.sizes,
-          colors: typeof p.colors === 'string' ? JSON.parse(p.colors) : p.colors,
-          image: (typeof p.images === 'string' ? JSON.parse(p.images)[0] : p.images[0]) || '/placeholder.svg',
+          images: Array.isArray(p.images) ? p.images : (typeof p.images === 'string' ? JSON.parse(p.images) : []),
+          sizes: Array.isArray(p.sizes) ? p.sizes : (typeof p.sizes === 'string' ? JSON.parse(p.sizes) : []),
+          colors: Array.isArray(p.colors) ? p.colors : (typeof p.colors === 'string' ? JSON.parse(p.colors) : []),
+          image: (Array.isArray(p.images) ? p.images[0] : (typeof p.images === 'string' ? JSON.parse(p.images)[0] : '/placeholder.svg')) || '/placeholder.svg',
           inStock: p.stock > 0,
           originalPrice: p.basePrice,
         }));
