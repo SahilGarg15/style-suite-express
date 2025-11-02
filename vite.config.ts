@@ -30,12 +30,14 @@ const apiPlugin = () => ({
           modulePath = './api/auth/index';
         } else if (apiPath.startsWith('auth/')) {
           modulePath = `./api/${apiPath}`;
-        } else if (apiPath.startsWith('v1/products')) {
-          // /api/v1/products (external API)
-          modulePath = './api/v1/products';
-        } else if (apiPath.startsWith('v1/orders')) {
-          // /api/v1/orders (external API)
-          modulePath = './api/v1/orders';
+        } else if (apiPath.startsWith('v1/')) {
+          // /api/v1/* (external API - consolidated endpoint)
+          modulePath = './api/v1/index';
+          // Extract action from path (products or orders)
+          const v1Path = apiPath.replace('v1/', '');
+          if (v1Path && v1Path !== 'index') {
+            url.searchParams.set('action', v1Path);
+          }
         } else if (apiPath.startsWith('admin/')) {
           // /api/admin/products, /api/admin/orders, etc.
           modulePath = `./api/${apiPath}`;

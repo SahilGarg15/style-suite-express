@@ -17,6 +17,8 @@ x-api-key: YOUR_API_KEY_HERE
 - **Development**: `http://localhost:8080/api/v1`
 - **Production**: `https://style-suite-express.vercel.app/api/v1`
 
+**Note**: The v1 API uses a single consolidated endpoint with an `action` parameter to specify products or orders.
+
 ---
 
 ## 1. Fetch Products
