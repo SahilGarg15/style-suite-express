@@ -18,8 +18,8 @@ const TrackOrder = () => {
     e.preventDefault();
     
     try {
-      // First try to fetch from API
-      const response = await fetch(`/api/orders/index?action=track&orderNumber=${orderId}`);
+      // First try to fetch from API - support both orderNumber and orderId
+      const response = await fetch(`/api/orders/index?action=track&orderNumber=${orderId}&orderId=${orderId}`);
       
       if (response.ok) {
         const fetchedOrder = await response.json();
@@ -117,10 +117,10 @@ const TrackOrder = () => {
           <form onSubmit={handleTrack} className="mb-12">
             <div className="flex gap-4">
               <div className="flex-1">
-                <Label htmlFor="orderId">Order ID</Label>
+                <Label htmlFor="orderId">Order ID or Order Number</Label>
                 <Input
                   id="orderId"
-                  placeholder="Enter your order ID (e.g., ORD-1234567890)"
+                  placeholder="Enter order ID (123) or order number (ORD-xxx)"
                   value={orderId}
                   onChange={(e) => setOrderId(e.target.value)}
                   required

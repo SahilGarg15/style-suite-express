@@ -139,29 +139,42 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         return res.status(405).json({ error: 'Method not allowed' });
       }
 
-      const { orderNumber } = req.query;
+      const { orderNumber, orderId } = req.query;
+      const searchValue = (orderNumber || orderId) as string;
 
-      if (!orderNumber || typeof orderNumber !== 'string') {
-        return res.status(400).json({ error: 'Order number is required' });
+      if (!searchValue) {
+        return res.status(400).json({ error: 'Order number or order ID is required' });
       }
 
-      const order = await prisma.order.findUnique({
-        where: { orderNumber },
-        include: {
-          items: {
-            include: {
-              product: {
-                select: {
-                  id: true,
-                  name: true,
-                  image: true,
-                  price: true
-                }
+      // Define common include clause for both queries
+      const includeClause = {
+        items: {
+          include: {
+            product: {
+              select: {
+                id: true,
+                name: true,
+                image: true,
+                price: true
               }
             }
           }
         }
+      };
+
+      // Try to find order by orderNumber first
+      let order = await prisma.order.findUnique({
+        where: { orderNumber: searchValue },
+        include: includeClause
       });
+
+      // If not found by orderNumber, try by ID (convert to string as ID is string type)
+      if (!order) {
+        order = await prisma.order.findUnique({
+          where: { id: searchValue },
+          include: includeClause
+        });
+      }
 
       if (!order) {
         return res.status(404).json({ error: 'Order not found' });
