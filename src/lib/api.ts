@@ -36,12 +36,16 @@ async function apiCall<T>(
     headers['Authorization'] = `Bearer ${token}`;
   }
 
-  const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+  const url = `${API_BASE_URL}${endpoint}`;
+  console.log('API Call:', url); // Debug log
+
+  const response = await fetch(url, {
     ...options,
     headers,
   });
 
   if (!response.ok) {
+    console.error('API Error:', response.status, url); // Debug log
     const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
     throw new Error(errorData.error || `HTTP ${response.status}`);
   }
