@@ -45,7 +45,7 @@ const Account = () => {
     const fetchOrders = async () => {
       if (user) {
         try {
-          const token = localStorage.getItem('token');
+          const token = localStorage.getItem('authToken');
           if (token) {
             // Fetch orders from API
             const response = await fetch('/api/orders/index?action=my-orders', {

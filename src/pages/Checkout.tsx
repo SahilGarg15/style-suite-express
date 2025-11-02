@@ -63,7 +63,7 @@ const Checkout = () => {
 
     // Try to save to API in background (don't block user if it fails)
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('authToken');
       
       if (token) {
         const orderData = {
@@ -107,11 +107,14 @@ const Checkout = () => {
           );
           updatedOrders.push({ ...localOrder, id: apiOrder.orderNumber, trackingNumber: apiOrder.orderNumber });
           localStorage.setItem(userOrdersKey, JSON.stringify(updatedOrders));
+        } else {
+          const errorData = await response.json();
+          console.error('Failed to save order to database:', response.status, errorData);
         }
       }
     } catch (error) {
       // Silently fail - order is already saved locally
-      console.warn('Failed to sync order to database:', error);
+      console.error('Failed to sync order to database:', error);
     }
 
     toast.success("Order placed successfully!");
