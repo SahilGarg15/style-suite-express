@@ -132,10 +132,10 @@ const Shop = () => {
         <h3 className="font-semibold mb-3">Price Range</h3>
         <div className="space-y-2">
           {[
-            { label: "Under $50", range: [0, 50] as [number, number] },
-            { label: "$50 - $100", range: [50, 100] as [number, number] },
-            { label: "$100 - $200", range: [100, 200] as [number, number] },
-            { label: "Over $200", range: [200, 500] as [number, number] },
+            { label: "Under ₹50", range: [0, 50] as [number, number] },
+            { label: "₹50 - ₹100", range: [50, 100] as [number, number] },
+            { label: "₹100 - ₹200", range: [100, 200] as [number, number] },
+            { label: "Over ₹200", range: [200, 500] as [number, number] },
           ].map((option) => (
             <div key={option.label} className="flex items-center space-x-2">
               <Checkbox

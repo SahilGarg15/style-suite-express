@@ -269,7 +269,7 @@ const Account = () => {
                           <div className="flex-1">
                             <p className="font-medium">{item.product.name}</p>
                             <p className="text-muted-foreground">
-                              Qty: {item.quantity} | {item.selectedSize} | {item.selectedColor}
+                              Qty: {item.quantity} | {item.selectedSize}
                             </p>
                           </div>
                         </div>

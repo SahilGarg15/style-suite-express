@@ -34,8 +34,7 @@ async function main() {
       category: 'men',
       image: '/royal-blue-silk-kurta-for-men.png',
       images: JSON.stringify(['/royal-blue-silk-kurta-for-men.png', '/royal-blue-silk-kurta.png']),
-      sizes: JSON.stringify(['S', 'M', 'L', 'XL', 'XXL']),
-      colors: JSON.stringify(['Royal Blue', 'Cream', 'Golden', 'Maroon'])
+      sizes: JSON.stringify(['S', 'M', 'L', 'XL', 'XXL'])
     },
     {
       id: 'sherwani-1',
@@ -45,8 +44,7 @@ async function main() {
       category: 'men',
       image: '/burgundy-silk-sherwani.png',
       images: JSON.stringify(['/burgundy-silk-sherwani.png', '/maroon-velvet-sherwani-with-gold-embroidery.png']),
-      sizes: JSON.stringify(['38', '40', '42', '44', '46']),
-      colors: JSON.stringify(['Burgundy', 'Maroon', 'Navy Blue', 'Golden'])
+      sizes: JSON.stringify(['38', '40', '42', '44', '46'])
     },
     {
       id: 'dhoti-kurta-1',
@@ -56,8 +54,7 @@ async function main() {
       category: 'men',
       image: '/traditional-white-dhoti.png',
       images: JSON.stringify(['/traditional-white-dhoti.png', '/traditional-white-cotton-dhoti.png']),
-      sizes: JSON.stringify(['S', 'M', 'L', 'XL']),
-      colors: JSON.stringify(['White', 'Cream', 'Light Yellow'])
+      sizes: JSON.stringify(['S', 'M', 'L', 'XL'])
     },
     {
       id: 'nehru-jacket-1',
@@ -67,8 +64,7 @@ async function main() {
       category: 'men',
       image: '/nehru-jacket.png',
       images: JSON.stringify(['/nehru-jacket.png', '/embroidered-waistcoat.png']),
-      sizes: JSON.stringify(['38', '40', '42', '44', '46']),
-      colors: JSON.stringify(['Black', 'Navy Blue', 'Maroon', 'Golden'])
+      sizes: JSON.stringify(['38', '40', '42', '44', '46'])
     },
     {
       id: 'formal-shirt-1',
@@ -78,8 +74,7 @@ async function main() {
       category: 'men',
       image: '/white-cotton-formal-shirt.png',
       images: JSON.stringify(['/white-cotton-formal-shirt.png', '/mens-white-cotton-dress-shirt.png']),
-      sizes: JSON.stringify(['S', 'M', 'L', 'XL', 'XXL']),
-      colors: JSON.stringify(['White', 'Light Blue', 'Pink', 'Grey'])
+      sizes: JSON.stringify(['S', 'M', 'L', 'XL', 'XXL'])
     },
     {
       id: 'formal-trousers-1',
@@ -89,8 +84,7 @@ async function main() {
       category: 'men',
       image: '/black-formal-trousers-for-men-office-wear.png',
       images: JSON.stringify(['/black-formal-trousers.png', '/black-formal-trousers-for-men-office-wear.png']),
-      sizes: JSON.stringify(['30', '32', '34', '36', '38', '40']),
-      colors: JSON.stringify(['Black', 'Navy Blue', 'Charcoal', 'Brown'])
+      sizes: JSON.stringify(['30', '32', '34', '36', '38', '40'])
     },
     {
       id: 'mens-leather-jacket-1',
@@ -100,8 +94,7 @@ async function main() {
       category: 'men',
       image: '/mens-black-leather-jacket.png',
       images: JSON.stringify(['/mens-black-leather-jacket.png']),
-      sizes: JSON.stringify(['S', 'M', 'L', 'XL', 'XXL']),
-      colors: JSON.stringify(['Black', 'Brown'])
+      sizes: JSON.stringify(['S', 'M', 'L', 'XL', 'XXL'])
     },
     {
       id: 'mens-jeans-1',
@@ -111,8 +104,7 @@ async function main() {
       category: 'men',
       image: '/mens-dark-blue-slim-fit-jeans.png',
       images: JSON.stringify(['/mens-dark-blue-slim-fit-jeans.png']),
-      sizes: JSON.stringify(['30', '32', '34', '36', '38', '40']),
-      colors: JSON.stringify(['Dark Blue', 'Light Blue', 'Black'])
+      sizes: JSON.stringify(['30', '32', '34', '36', '38', '40'])
     },
     {
       id: 'cotton-saree-1',
@@ -122,8 +114,7 @@ async function main() {
       category: 'women',
       image: '/blue-georgette-saree-with-floral-print.png',
       images: JSON.stringify(['/blue-georgette-saree.png', '/blue-georgette-saree-with-floral-print.png']),
-      sizes: JSON.stringify(['Free Size']),
-      colors: JSON.stringify(['Blue', 'Red', 'Green', 'Yellow'])
+      sizes: JSON.stringify(['Free Size'])
     },
     {
       id: 'banarasi-saree-1',
@@ -133,8 +124,7 @@ async function main() {
       category: 'women',
       image: '/red-banarasi-silk-saree-with-gold-border.png',
       images: JSON.stringify(['/red-banarasi-silk-saree.png', '/red-banarasi-silk-saree-with-gold-border.png']),
-      sizes: JSON.stringify(['Free Size']),
-      colors: JSON.stringify(['Red', 'Maroon', 'Royal Blue', 'Golden'])
+      sizes: JSON.stringify(['Free Size'])
     },
     {
       id: 'anarkali-suit-1',
@@ -144,8 +134,7 @@ async function main() {
       category: 'women',
       image: '/green-anarkali-salwar-suit.png',
       images: JSON.stringify(['/green-anarkali-suit.png', '/green-anarkali-salwar-suit.png']),
-      sizes: JSON.stringify(['S', 'M', 'L', 'XL', 'XXL']),
-      colors: JSON.stringify(['Green', 'Pink', 'Blue', 'Purple'])
+      sizes: JSON.stringify(['S', 'M', 'L', 'XL', 'XXL'])
     },
     {
       id: 'cotton-kurti-1',
@@ -155,8 +144,7 @@ async function main() {
       category: 'women',
       image: '/cotton-printed-kurti-with-floral-design.png',
       images: JSON.stringify(['/cotton-printed-kurti.png', '/cotton-printed-kurti-with-floral-design.png']),
-      sizes: JSON.stringify(['S', 'M', 'L', 'XL']),
-      colors: JSON.stringify(['White', 'Pink', 'Blue', 'Yellow'])
+      sizes: JSON.stringify(['S', 'M', 'L', 'XL'])
     },
     {
       id: 'block-print-kurti-1',
@@ -166,8 +154,7 @@ async function main() {
       category: 'women',
       image: '/block-print-cotton-kurti.png',
       images: JSON.stringify(['/block-print-cotton-kurti.png']),
-      sizes: JSON.stringify(['S', 'M', 'L', 'XL']),
-      colors: JSON.stringify(['Indigo', 'Red', 'Black', 'Mustard'])
+      sizes: JSON.stringify(['S', 'M', 'L', 'XL'])
     },
     {
       id: 'chanderi-dupatta-1',
@@ -177,8 +164,7 @@ async function main() {
       category: 'women',
       image: '/chanderi-silk-dupatta.png',
       images: JSON.stringify(['/chanderi-silk-dupatta.png']),
-      sizes: JSON.stringify(['Free Size']),
-      colors: JSON.stringify(['Pink', 'Blue', 'Green', 'Orange'])
+      sizes: JSON.stringify(['Free Size'])
     },
     {
       id: 'palazzo-suit-1',
@@ -188,8 +174,7 @@ async function main() {
       category: 'women',
       image: '/palazzo-pants-set.png',
       images: JSON.stringify(['/palazzo-pants-set.png']),
-      sizes: JSON.stringify(['S', 'M', 'L', 'XL']),
-      colors: JSON.stringify(['Black', 'Navy', 'Pink', 'White'])
+      sizes: JSON.stringify(['S', 'M', 'L', 'XL'])
     },
     {
       id: 'fusion-jacket-dress-1',
@@ -199,8 +184,7 @@ async function main() {
       category: 'women',
       image: '/fusion-jacket-dress.png',
       images: JSON.stringify(['/fusion-jacket-dress.png']),
-      sizes: JSON.stringify(['S', 'M', 'L', 'XL']),
-      colors: JSON.stringify(['Black', 'Navy', 'Maroon', 'Grey'])
+      sizes: JSON.stringify(['S', 'M', 'L', 'XL'])
     },
     {
       id: 'indo-western-crop-top-1',
@@ -210,8 +194,7 @@ async function main() {
       category: 'women',
       image: '/indo-western-crop-top-and-skirt-set.png',
       images: JSON.stringify(['/indo-western-crop-top.png', '/indo-western-crop-top-and-skirt-set.png']),
-      sizes: JSON.stringify(['S', 'M', 'L', 'XL']),
-      colors: JSON.stringify(['Pink', 'Blue', 'Black', 'White'])
+      sizes: JSON.stringify(['S', 'M', 'L', 'XL'])
     },
     {
       id: 'womens-summer-dress-1',
@@ -221,8 +204,7 @@ async function main() {
       category: 'women',
       image: '/womens-floral-summer-dress.png',
       images: JSON.stringify(['/womens-floral-summer-dress.png']),
-      sizes: JSON.stringify(['S', 'M', 'L', 'XL']),
-      colors: JSON.stringify(['Floral Pink', 'Floral Blue', 'Floral Yellow'])
+      sizes: JSON.stringify(['S', 'M', 'L', 'XL'])
     },
     {
       id: 'womens-silk-blouse-1',
@@ -232,8 +214,7 @@ async function main() {
       category: 'women',
       image: '/womens-white-silk-blouse.png',
       images: JSON.stringify(['/womens-white-silk-blouse.png']),
-      sizes: JSON.stringify(['S', 'M', 'L', 'XL']),
-      colors: JSON.stringify(['White', 'Cream', 'Light Pink'])
+      sizes: JSON.stringify(['S', 'M', 'L', 'XL'])
     },
     {
       id: 'womens-trousers-1',
@@ -243,8 +224,7 @@ async function main() {
       category: 'women',
       image: '/womens-black-high-waist-trousers.png',
       images: JSON.stringify(['/womens-black-high-waist-trousers.png']),
-      sizes: JSON.stringify(['26', '28', '30', '32', '34']),
-      colors: JSON.stringify(['Black', 'Navy Blue', 'Grey'])
+      sizes: JSON.stringify(['26', '28', '30', '32', '34'])
     },
     {
       id: 'boys-kurta-pajama-1',
@@ -254,8 +234,7 @@ async function main() {
       category: 'children',
       image: '/boys-kurta-pajama-set-in-cream-color.png',
       images: JSON.stringify(['/boys-kurta-pajama-set.png', '/boys-kurta-pajama-set-in-cream-color.png']),
-      sizes: JSON.stringify(['2-3Y', '4-5Y', '6-7Y', '8-9Y', '10-11Y']),
-      colors: JSON.stringify(['Cream', 'White', 'Light Blue', 'Pink'])
+      sizes: JSON.stringify(['2-3Y', '4-5Y', '6-7Y', '8-9Y', '10-11Y'])
     },
     {
       id: 'boys-bandhgala-1',
@@ -265,8 +244,7 @@ async function main() {
       category: 'children',
       image: '/boys-bandhgala-set.png',
       images: JSON.stringify(['/boys-bandhgala-set.png']),
-      sizes: JSON.stringify(['2-3Y', '4-5Y', '6-7Y', '8-9Y', '10-11Y']),
-      colors: JSON.stringify(['Navy Blue', 'Black', 'Maroon'])
+      sizes: JSON.stringify(['2-3Y', '4-5Y', '6-7Y', '8-9Y', '10-11Y'])
     },
     {
       id: 'boys-casual-shirt-1',
@@ -276,8 +254,7 @@ async function main() {
       category: 'children',
       image: '/boys-casual-shirt.png',
       images: JSON.stringify(['/boys-casual-shirt.png']),
-      sizes: JSON.stringify(['2-3Y', '4-5Y', '6-7Y', '8-9Y', '10-11Y']),
-      colors: JSON.stringify(['Blue', 'White', 'Green', 'Yellow'])
+      sizes: JSON.stringify(['2-3Y', '4-5Y', '6-7Y', '8-9Y', '10-11Y'])
     },
     {
       id: 'girls-lehenga-1',
@@ -287,8 +264,7 @@ async function main() {
       category: 'children',
       image: '/girls-pink-lehenga-choli-with-embroidery.png',
       images: JSON.stringify(['/girls-lehenga-choli.png', '/girls-pink-lehenga-choli-with-embroidery.png']),
-      sizes: JSON.stringify(['2-3Y', '4-5Y', '6-7Y', '8-9Y', '10-11Y']),
-      colors: JSON.stringify(['Pink', 'Blue', 'Red', 'Purple'])
+      sizes: JSON.stringify(['2-3Y', '4-5Y', '6-7Y', '8-9Y', '10-11Y'])
     },
     {
       id: 'girls-anarkali-1',
@@ -298,8 +274,7 @@ async function main() {
       category: 'children',
       image: '/girls-anarkali-dress.png',
       images: JSON.stringify(['/girls-anarkali-dress.png']),
-      sizes: JSON.stringify(['2-3Y', '4-5Y', '6-7Y', '8-9Y', '10-11Y']),
-      colors: JSON.stringify(['Pink', 'Blue', 'Purple', 'Green'])
+      sizes: JSON.stringify(['2-3Y', '4-5Y', '6-7Y', '8-9Y', '10-11Y'])
     },
     {
       id: 'girls-party-dress-1',
@@ -309,8 +284,7 @@ async function main() {
       category: 'children',
       image: '/girls-pink-party-dress.png',
       images: JSON.stringify(['/girls-pink-party-dress.png']),
-      sizes: JSON.stringify(['2-3Y', '4-5Y', '6-7Y', '8-9Y', '10-11Y']),
-      colors: JSON.stringify(['Pink', 'Blue', 'White', 'Purple'])
+      sizes: JSON.stringify(['2-3Y', '4-5Y', '6-7Y', '8-9Y', '10-11Y'])
     },
     {
       id: 'girls-denim-skirt-1',
@@ -320,8 +294,7 @@ async function main() {
       category: 'children',
       image: '/girls-denim-skirt.png',
       images: JSON.stringify(['/girls-denim-skirt.png']),
-      sizes: JSON.stringify(['2-3Y', '4-5Y', '6-7Y', '8-9Y', '10-11Y']),
-      colors: JSON.stringify(['Blue', 'Black', 'Light Blue'])
+      sizes: JSON.stringify(['2-3Y', '4-5Y', '6-7Y', '8-9Y', '10-11Y'])
     },
     {
       id: 'girls-ghagra-1',
@@ -331,8 +304,7 @@ async function main() {
       category: 'children',
       image: '/girls-ghagra-set.png',
       images: JSON.stringify(['/girls-ghagra-set.png']),
-      sizes: JSON.stringify(['2-3Y', '4-5Y', '6-7Y', '8-9Y', '10-11Y']),
-      colors: JSON.stringify(['Red', 'Pink', 'Blue', 'Yellow'])
+      sizes: JSON.stringify(['2-3Y', '4-5Y', '6-7Y', '8-9Y', '10-11Y'])
     },
     {
       id: 'girls-sharara-1',
@@ -342,8 +314,7 @@ async function main() {
       category: 'children',
       image: '/girls-sharara-set.png',
       images: JSON.stringify(['/girls-sharara-set.png']),
-      sizes: JSON.stringify(['2-3Y', '4-5Y', '6-7Y', '8-9Y', '10-11Y']),
-      colors: JSON.stringify(['Pink', 'Blue', 'Green', 'Purple'])
+      sizes: JSON.stringify(['2-3Y', '4-5Y', '6-7Y', '8-9Y', '10-11Y'])
     },
     {
       id: 'kids-tshirt-1',
@@ -353,8 +324,7 @@ async function main() {
       category: 'children',
       image: '/kids-colorful-cotton-tshirt.png',
       images: JSON.stringify(['/kids-cotton-tshirt.png', '/kids-colorful-cotton-tshirt.png']),
-      sizes: JSON.stringify(['2-3Y', '4-5Y', '6-7Y', '8-9Y', '10-11Y']),
-      colors: JSON.stringify(['Red', 'Blue', 'Green', 'Yellow', 'Pink'])
+      sizes: JSON.stringify(['2-3Y', '4-5Y', '6-7Y', '8-9Y', '10-11Y'])
     },
     {
       id: 'kids-denim-jacket-1',
@@ -364,8 +334,7 @@ async function main() {
       category: 'children',
       image: '/kids-blue-denim-jacket.png',
       images: JSON.stringify(['/kids-denim-jacket.png', '/kids-blue-denim-jacket.png']),
-      sizes: JSON.stringify(['2-3Y', '4-5Y', '6-7Y', '8-9Y', '10-11Y']),
-      colors: JSON.stringify(['Blue', 'Black', 'Light Blue'])
+      sizes: JSON.stringify(['2-3Y', '4-5Y', '6-7Y', '8-9Y', '10-11Y'])
     },
     {
       id: 'men-formal-shoes-1',
@@ -375,8 +344,7 @@ async function main() {
       category: 'men',
       image: '/mens-leather-formal-shoes.jpg',
       images: JSON.stringify(['/mens-leather-formal-shoes.jpg']),
-      sizes: JSON.stringify(['6', '7', '8', '9', '10', '11']),
-      colors: JSON.stringify(['Black', 'Brown', 'Tan'])
+      sizes: JSON.stringify(['6', '7', '8', '9', '10', '11'])
     },
     {
       id: 'men-ethnic-mojari-1',
@@ -386,8 +354,7 @@ async function main() {
       category: 'men',
       image: '/mens-traditional-mojaris.jpg',
       images: JSON.stringify(['/mens-traditional-mojaris.jpg']),
-      sizes: JSON.stringify(['6', '7', '8', '9', '10', '11']),
-      colors: JSON.stringify(['Brown', 'Black', 'Maroon', 'Golden'])
+      sizes: JSON.stringify(['6', '7', '8', '9', '10', '11'])
     },
     {
       id: 'women-ethnic-sandals-1',
@@ -397,8 +364,7 @@ async function main() {
       category: 'women',
       image: '/womens-ethnic-sandals.jpg',
       images: JSON.stringify(['/womens-ethnic-sandals.jpg']),
-      sizes: JSON.stringify(['5', '6', '7', '8', '9']),
-      colors: JSON.stringify(['Brown', 'Black', 'Red', 'Orange'])
+      sizes: JSON.stringify(['5', '6', '7', '8', '9'])
     },
     {
       id: 'leather-handbag-1',
@@ -408,8 +374,7 @@ async function main() {
       category: 'women',
       image: '/womens-embroidered-handbag.jpg',
       images: JSON.stringify(['/womens-embroidered-handbag.jpg']),
-      sizes: JSON.stringify(['One Size']),
-      colors: JSON.stringify(['Brown', 'Black', 'Tan', 'Navy Blue'])
+      sizes: JSON.stringify(['One Size'])
     },
     {
       id: 'mens-leather-belt-1',
@@ -419,8 +384,7 @@ async function main() {
       category: 'men',
       image: '/mens-leather-belt.jpg',
       images: JSON.stringify(['/mens-leather-belt.jpg']),
-      sizes: JSON.stringify(['32', '34', '36', '38', '40']),
-      colors: JSON.stringify(['Black', 'Brown', 'Tan'])
+      sizes: JSON.stringify(['32', '34', '36', '38', '40'])
     },
     {
       id: 'womens-jewelry-set-1',
@@ -430,8 +394,7 @@ async function main() {
       category: 'women',
       image: '/womens-ethnic-jewelry-set.jpg',
       images: JSON.stringify(['/womens-ethnic-jewelry-set.jpg']),
-      sizes: JSON.stringify(['One Size']),
-      colors: JSON.stringify(['Gold', 'Silver'])
+      sizes: JSON.stringify(['One Size'])
     },
     {
       id: 'men-watch-1',
@@ -441,8 +404,7 @@ async function main() {
       category: 'men',
       image: '/mens-traditional-watch.jpg',
       images: JSON.stringify(['/mens-traditional-watch.jpg']),
-      sizes: JSON.stringify(['One Size']),
-      colors: JSON.stringify(['Black', 'Brown', 'Silver'])
+      sizes: JSON.stringify(['One Size'])
     },
     {
       id: 'mens-silk-pocket-square-1',
@@ -452,8 +414,7 @@ async function main() {
       category: 'men',
       image: '/mens-silk-pocket-square.jpg',
       images: JSON.stringify(['/mens-silk-pocket-square.jpg']),
-      sizes: JSON.stringify(['One Size']),
-      colors: JSON.stringify(['Blue', 'Red', 'Black', 'White'])
+      sizes: JSON.stringify(['One Size'])
     }
   ]
 

@@ -51,7 +51,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       ...product,
       images: JSON.parse(product.images),
       sizes: JSON.parse(product.sizes),
-      colors: JSON.parse(product.colors),
+      colors: product.colors ? JSON.parse(product.colors) : [],
       averageRating: ratings._avg.rating || 0,
       reviewCount: product._count.reviews
     }

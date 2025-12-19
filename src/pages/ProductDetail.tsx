@@ -26,7 +26,6 @@ const ProductDetail = () => {
 
   const [selectedImage, setSelectedImage] = useState(0);
   const [selectedSize, setSelectedSize] = useState("");
-  const [selectedColor, setSelectedColor] = useState("");
   const [quantity, setQuantity] = useState(1);
 
   // Reviews state
@@ -51,7 +50,6 @@ const ProductDetail = () => {
           ...data,
           images: typeof data.images === 'string' ? JSON.parse(data.images) : data.images,
           sizes: typeof data.sizes === 'string' ? JSON.parse(data.sizes) : data.sizes,
-          colors: typeof data.colors === 'string' ? JSON.parse(data.colors) : data.colors,
           image: (typeof data.images === 'string' ? JSON.parse(data.images)[0] : data.images[0]) || '/placeholder.svg',
           inStock: data.stock > 0,
           originalPrice: data.basePrice,
@@ -173,11 +171,11 @@ const ProductDetail = () => {
   const relatedProducts: any[] = [];
 
   const handleAddToCart = () => {
-    if (!selectedSize || !selectedColor) {
-      alert("Please select size and color");
+    if (!selectedSize) {
+      alert("Please select size");
       return;
     }
-    addToCart(product, selectedSize, selectedColor, quantity);
+    addToCart(product, selectedSize, quantity);
   };
 
   const inWishlist = isInWishlist(product.id);
@@ -283,23 +281,6 @@ const ProductDetail = () => {
                   {product.sizes.map((size) => (
                     <SelectItem key={size} value={size}>
                       {size}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-
-            {/* Color Selection */}
-            <div className="mb-6">
-              <Label className="text-sm font-semibold mb-2 block">Select Color</Label>
-              <Select value={selectedColor} onValueChange={setSelectedColor}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Choose color" />
-                </SelectTrigger>
-                <SelectContent>
-                  {product.colors.map((color) => (
-                    <SelectItem key={color} value={color}>
-                      {color}
                     </SelectItem>
                   ))}
                 </SelectContent>

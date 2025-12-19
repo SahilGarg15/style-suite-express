@@ -37,7 +37,6 @@ const TrackOrder = () => {
             product: item.product,
             quantity: item.quantity,
             selectedSize: "M", // Default since API doesn't store this
-            selectedColor: "Default"
           })),
           total: fetchedOrder.total,
           status: fetchedOrder.status.toLowerCase(),
@@ -211,7 +210,7 @@ const TrackOrder = () => {
                       <div className="flex-1">
                         <p className="font-semibold">{item.product.name}</p>
                         <p className="text-sm text-muted-foreground">
-                          Size: {item.selectedSize} | Color: {item.selectedColor}
+                          Size: {item.selectedSize}
                         </p>
                         <p className="text-sm">Quantity: {item.quantity}</p>
                       </div>

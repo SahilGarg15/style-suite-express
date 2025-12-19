@@ -4,9 +4,9 @@ import { toast } from "sonner";
 
 interface CartContextType {
   items: CartItem[];
-  addToCart: (product: Product, size: string, color: string, quantity?: number) => void;
-  removeFromCart: (productId: string, size: string, color: string) => void;
-  updateQuantity: (productId: string, size: string, color: string, quantity: number) => void;
+  addToCart: (product: Product, size: string, quantity?: number) => void;
+  removeFromCart: (productId: string, size: string) => void;
+  updateQuantity: (productId: string, size: string, quantity: number) => void;
   clearCart: () => void;
   getTotal: () => number;
   getItemCount: () => number;
@@ -24,56 +24,52 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     localStorage.setItem("cart", JSON.stringify(items));
   }, [items]);
 
-  const addToCart = (product: Product, size: string, color: string, quantity: number = 1) => {
+  const addToCart = (product: Product, size: string, quantity: number = 1) => {
     setItems((prevItems) => {
       const existingItem = prevItems.find(
         (item) =>
           item.product.id === product.id &&
-          item.selectedSize === size &&
-          item.selectedColor === color
+          item.selectedSize === size
       );
 
       if (existingItem) {
         toast.success("Updated cart quantity");
         return prevItems.map((item) =>
           item.product.id === product.id &&
-          item.selectedSize === size &&
-          item.selectedColor === color
+          item.selectedSize === size
             ? { ...item, quantity: item.quantity + quantity }
             : item
         );
       }
 
       toast.success("Added to cart");
-      return [...prevItems, { product, quantity, selectedSize: size, selectedColor: color }];
+      return [...prevItems, { product, quantity, selectedSize: size }];
     });
   };
 
-  const removeFromCart = (productId: string, size: string, color: string) => {
+  const removeFromCart = (productId: string, size: string) => {
     setItems((prevItems) =>
       prevItems.filter(
         (item) =>
           !(
             item.product.id === productId &&
-            item.selectedSize === size &&
-            item.selectedColor === color
+            item.selectedSize === size
           )
       )
     );
     toast.success("Removed from cart");
   };
 
-  const updateQuantity = (productId: string, size: string, color: string, quantity: number) => {
+  const updateQuantity = (productId: string, size: string, quantity: number) => {
     if (quantity <= 0) {
-      removeFromCart(productId, size, color);
+      removeFromCart(productId, size);
       return;
     }
 
     setItems((prevItems) =>
       prevItems.map((item) =>
         item.product.id === productId &&
-        item.selectedSize === size &&
-        item.selectedColor === color
+        item.selectedSize === size
           ? { ...item, quantity }
           : item
       )

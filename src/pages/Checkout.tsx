@@ -229,7 +229,7 @@ const Checkout = () => {
               <div className="space-y-4 mb-6 max-h-64 overflow-y-auto">
                 {items.map((item) => (
                   <div
-                    key={`${item.product.id}-${item.selectedSize}-${item.selectedColor}`}
+                    key={`${item.product.id}-${item.selectedSize}`}
                     className="flex gap-3"
                   >
                     <img
@@ -240,7 +240,7 @@ const Checkout = () => {
                     <div className="flex-1">
                       <p className="font-semibold text-sm">{item.product.name}</p>
                       <p className="text-xs text-muted-foreground">
-                        {item.selectedSize} | {item.selectedColor}
+                        {item.selectedSize}
                       </p>
                       <p className="text-sm">Qty: {item.quantity}</p>
                     </div>

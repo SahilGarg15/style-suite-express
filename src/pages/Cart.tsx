@@ -41,7 +41,7 @@ const Cart = () => {
             <div className="space-y-4">
               {items.map((item) => (
                 <div
-                  key={`${item.product.id}-${item.selectedSize}-${item.selectedColor}`}
+                  key={`${item.product.id}-${item.selectedSize}`}
                   className="flex gap-4 p-4 border rounded-lg"
                 >
                   <img
@@ -54,7 +54,7 @@ const Cart = () => {
                       {item.product.name}
                     </Link>
                     <p className="text-sm text-muted-foreground">
-                      Size: {item.selectedSize} | Color: {item.selectedColor}
+                      Size: {item.selectedSize}
                     </p>
                     <p className="text-lg font-bold mt-2">₹{item.product.price}</p>
                   </div>
@@ -63,7 +63,7 @@ const Cart = () => {
                       variant="ghost"
                       size="icon"
                       onClick={() =>
-                        removeFromCart(item.product.id, item.selectedSize, item.selectedColor)
+                        removeFromCart(item.product.id, item.selectedSize)
                       }
                     >
                       <Trash2 className="h-4 w-4" />
@@ -77,7 +77,6 @@ const Cart = () => {
                           updateQuantity(
                             item.product.id,
                             item.selectedSize,
-                            item.selectedColor,
                             item.quantity - 1
                           )
                         }
@@ -93,7 +92,6 @@ const Cart = () => {
                           updateQuantity(
                             item.product.id,
                             item.selectedSize,
-                            item.selectedColor,
                             item.quantity + 1
                           )
                         }

@@ -22,7 +22,6 @@ export interface CartItem {
   product: Product;
   quantity: number;
   selectedSize: string;
-  selectedColor: string;
 }
 
 export interface Order {

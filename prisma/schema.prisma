@@ -55,7 +55,7 @@ model Product {
   image              String
   images             String   // JSON string for array
   sizes              String   // JSON string for array
-  colors             String   // JSON string for array
+  colors             String?  // JSON string for array (optional)
   inStock            Boolean  @default(true)
   stock              Int      @default(0)
   lowStockThreshold  Int      @default(5)
