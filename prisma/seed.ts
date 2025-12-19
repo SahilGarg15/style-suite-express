@@ -6,7 +6,7 @@ const prisma = new PrismaClient()
 async function main() {
   console.log('Seeding database...')
 
-  // Create a demo user for login testing
+  // Create demo users for reviews
   const hashedPassword = await bcrypt.hash('demo123', 12)
   
   const testUser = await prisma.user.upsert({
@@ -21,7 +21,40 @@ async function main() {
     }
   })
 
-  console.log('Created demo user:', testUser.email)
+  const reviewer1 = await prisma.user.upsert({
+    where: { email: 'customer1@example.com' },
+    update: {},
+    create: {
+      name: 'Priya Sharma',
+      email: 'customer1@example.com',
+      password: hashedPassword,
+      isVerified: true
+    }
+  })
+
+  const reviewer2 = await prisma.user.upsert({
+    where: { email: 'customer2@example.com' },
+    update: {},
+    create: {
+      name: 'Rahul Verma',
+      email: 'customer2@example.com',
+      password: hashedPassword,
+      isVerified: true
+    }
+  })
+
+  const reviewer3 = await prisma.user.upsert({
+    where: { email: 'customer3@example.com' },
+    update: {},
+    create: {
+      name: 'Anita Patel',
+      email: 'customer3@example.com',
+      password: hashedPassword,
+      isVerified: true
+    }
+  })
+
+  console.log('Created demo users')
 
   // Comprehensive product catalog with Indian and Western items
   const sampleProducts = [
@@ -431,23 +464,76 @@ async function main() {
 
   console.log('Added sample products')
 
-  await prisma.review.upsert({
-    where: {
-      userId_productId: {
-        userId: testUser.id,
-        productId: 'silk-kurta-1'
-      }
-    },
-    update: {},
-    create: {
-      userId: testUser.id,
-      productId: 'silk-kurta-1',
-      rating: 5,
-      comment: 'Excellent quality silk kurta! Perfect fit and great fabric.'
-    }
-  })
+  // Mock reviews for products
+  const reviews = [
+    // Men's Traditional Wear Reviews
+    { userId: reviewer1.id, productId: 'silk-kurta-1', rating: 5, comment: 'Excellent quality silk kurta! Perfect fit and great fabric. Highly recommend for festivals.' },
+    { userId: reviewer2.id, productId: 'silk-kurta-1', rating: 4, comment: 'Beautiful blue color and comfortable to wear. Embroidery work is really nice.' },
+    { userId: reviewer1.id, productId: 'sherwani-1', rating: 5, comment: 'Stunning sherwani for my wedding! The embroidery work is exquisite. Worth every penny.' },
+    { userId: reviewer3.id, productId: 'sherwani-1', rating: 5, comment: 'Premium quality and fit. Received many compliments at the wedding.' },
+    { userId: reviewer2.id, productId: 'dhoti-kurta-1', rating: 4, comment: 'Traditional and comfortable. Perfect for puja ceremonies.' },
+    { userId: reviewer1.id, productId: 'nehru-jacket-1', rating: 5, comment: 'Contemporary design with traditional touch. Great for parties and events.' },
+    { userId: reviewer3.id, productId: 'nehru-jacket-1', rating: 4, comment: 'Nice embroidery work. Fits perfectly and looks elegant.' },
+    { userId: reviewer2.id, productId: 'formal-shirt-1', rating: 5, comment: 'Best formal shirt! Premium cotton and perfect for office wear.' },
+    { userId: reviewer1.id, productId: 'formal-trousers-1', rating: 4, comment: 'Good quality fabric and slim fit. Comfortable for all-day wear.' },
+    { userId: reviewer3.id, productId: 'mens-leather-jacket-1', rating: 5, comment: 'Premium leather jacket! Looks stylish and feels great.' },
+    { userId: reviewer2.id, productId: 'mens-jeans-1', rating: 4, comment: 'Comfortable slim fit jeans. Good quality denim.' },
+    
+    // Women's Wear Reviews
+    { userId: reviewer1.id, productId: 'cotton-saree-1', rating: 5, comment: 'Beautiful floral print! Georgette fabric is soft and comfortable.' },
+    { userId: reviewer3.id, productId: 'cotton-saree-1', rating: 4, comment: 'Lovely saree for casual occasions. Good quality at this price.' },
+    { userId: reviewer1.id, productId: 'banarasi-saree-1', rating: 5, comment: 'Absolutely stunning Banarasi saree! The golden border is gorgeous.' },
+    { userId: reviewer2.id, productId: 'banarasi-saree-1', rating: 5, comment: 'Premium silk quality. Perfect for weddings and special occasions.' },
+    { userId: reviewer3.id, productId: 'anarkali-suit-1', rating: 5, comment: 'Elegant anarkali with beautiful embroidery. Received so many compliments!' },
+    { userId: reviewer1.id, productId: 'anarkali-suit-1', rating: 4, comment: 'Good quality fabric and nice fitting. Perfect for parties.' },
+    { userId: reviewer2.id, productId: 'cotton-kurti-1', rating: 5, comment: 'Very comfortable cotton kurti! Perfect for daily wear.' },
+    { userId: reviewer3.id, productId: 'block-print-kurti-1', rating: 4, comment: 'Traditional block print is beautiful. Comfortable and stylish.' },
+    { userId: reviewer1.id, productId: 'chanderi-dupatta-1', rating: 5, comment: 'Pure chanderi silk! The golden border adds elegance.' },
+    { userId: reviewer2.id, productId: 'palazzo-suit-1', rating: 4, comment: 'Comfortable palazzo set. Great for both casual and formal wear.' },
+    { userId: reviewer3.id, productId: 'fusion-jacket-dress-1', rating: 5, comment: 'Love this fusion dress! Perfect blend of Indian and Western styles.' },
+    { userId: reviewer1.id, productId: 'indo-western-crop-top-1', rating: 4, comment: 'Stylish crop top set. Great for parties and events.' },
+    { userId: reviewer2.id, productId: 'womens-summer-dress-1', rating: 5, comment: 'Light and comfortable summer dress. Floral print is lovely.' },
+    { userId: reviewer3.id, productId: 'womens-silk-blouse-1', rating: 4, comment: 'Elegant silk blouse. Perfect for formal occasions.' },
+    { userId: reviewer1.id, productId: 'womens-trousers-1', rating: 5, comment: 'Perfect fit! High waist design is flattering and comfortable.' },
+    
+    // Children's Wear Reviews
+    { userId: reviewer2.id, productId: 'boys-kurta-pajama-1', rating: 5, comment: 'My son loves this kurta pajama! Comfortable and looks adorable.' },
+    { userId: reviewer3.id, productId: 'boys-kurta-pajama-1', rating: 4, comment: 'Good quality cotton. Perfect for festivals and family functions.' },
+    { userId: reviewer1.id, productId: 'boys-bandhgala-1', rating: 5, comment: 'Stylish bandhgala! My son looked like a prince at the wedding.' },
+    { userId: reviewer2.id, productId: 'boys-casual-shirt-1', rating: 4, comment: 'Comfortable shirt for daily wear. Good quality fabric.' },
+    { userId: reviewer3.id, productId: 'girls-lehenga-1', rating: 5, comment: 'Beautiful pink lehenga! My daughter loves it. Embroidery is stunning.' },
+    { userId: reviewer1.id, productId: 'girls-lehenga-1', rating: 5, comment: 'Excellent quality and perfect fit. She looked like a princess!' },
+    { userId: reviewer2.id, productId: 'girls-anarkali-1', rating: 4, comment: 'Elegant anarkali dress. Good quality and comfortable for kids.' },
+    { userId: reviewer3.id, productId: 'girls-party-dress-1', rating: 5, comment: 'Perfect party dress! My daughter wore it for her birthday.' },
+    { userId: reviewer1.id, productId: 'girls-denim-skirt-1', rating: 4, comment: 'Cute denim skirt. Good quality and perfect for casual wear.' },
+    { userId: reviewer2.id, productId: 'girls-ghagra-1', rating: 5, comment: 'Traditional ghagra set. Beautiful colors and designs.' },
+    { userId: reviewer3.id, productId: 'girls-sharara-1', rating: 4, comment: 'Elegant sharara set. Perfect for festivals and functions.' },
+    { userId: reviewer1.id, productId: 'kids-tshirt-1', rating: 5, comment: 'Colorful and comfortable t-shirt! My kid loves the design.' },
+    { userId: reviewer2.id, productId: 'kids-denim-jacket-1', rating: 4, comment: 'Stylish denim jacket. Good quality and fits well.' },
+    
+    // Footwear & Accessories Reviews
+    { userId: reviewer3.id, productId: 'men-formal-shoes-1', rating: 5, comment: 'Premium leather shoes! Very comfortable for all-day wear at office.' },
+    { userId: reviewer1.id, productId: 'men-ethnic-mojari-1', rating: 4, comment: 'Traditional mojari with great craftsmanship. Perfect for ethnic wear.' },
+    { userId: reviewer2.id, productId: 'women-ethnic-sandals-1', rating: 5, comment: 'Comfortable and beautiful sandals! Great for traditional outfits.' },
+    { userId: reviewer3.id, productId: 'leather-handbag-1', rating: 5, comment: 'Elegant embroidered handbag. Good quality and spacious.' },
+    { userId: reviewer1.id, productId: 'mens-leather-belt-1', rating: 4, comment: 'Good quality leather belt. Sturdy and looks premium.' },
+    { userId: reviewer2.id, productId: 'womens-jewelry-set-1', rating: 5, comment: 'Beautiful ethnic jewelry set! Looks expensive but very affordable.' },
+    { userId: reviewer3.id, productId: 'men-watch-1', rating: 4, comment: 'Stylish traditional watch. Good quality and keeps accurate time.' },
+    { userId: reviewer1.id, productId: 'mens-silk-pocket-square-1', rating: 5, comment: 'Premium silk pocket square. Adds elegance to formal wear.' }
+  ]
 
-  console.log('Added sample review')
+  for (const review of reviews) {
+    await prisma.review.create({
+      data: {
+        userId: review.userId,
+        productId: review.productId,
+        rating: review.rating,
+        comment: review.comment
+      }
+    })
+  }
+
+  console.log('Added mock reviews and ratings')
   console.log('Database seeded successfully!')
 }
 
