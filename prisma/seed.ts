@@ -56,6 +56,20 @@ async function main() {
 
   console.log('Created demo users')
 
+  // Create API key for external integrations
+  await prisma.apiKey.upsert({
+    where: { key: '37d07e0a2a290644cf9c3e731462128e741abda974c3ae882367c483893b521a' },
+    update: {},
+    create: {
+      key: '37d07e0a2a290644cf9c3e731462128e741abda974c3ae882367c483893b521a',
+      name: 'Shopping Agent API Key',
+      description: 'API key for shopping agent integration',
+      isActive: true
+    }
+  })
+
+  console.log('Created API key')
+
   // Comprehensive product catalog with Indian and Western items
   const sampleProducts = [
     // Men's Indian Traditional Wear
