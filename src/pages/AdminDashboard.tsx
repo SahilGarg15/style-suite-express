@@ -262,8 +262,8 @@ const AdminDashboard = () => {
                       <TableCell className="font-mono text-sm">{order.orderNumber}</TableCell>
                       <TableCell>
                         <div>
-                          <p className="font-medium">{order.user.name}</p>
-                          <p className="text-xs text-muted-foreground">{order.user.email}</p>
+                          <p className="font-medium">{order.user?.name || 'Unknown User'}</p>
+                          <p className="text-xs text-muted-foreground">{order.user?.email || 'N/A'}</p>
                         </div>
                       </TableCell>
                       <TableCell>
